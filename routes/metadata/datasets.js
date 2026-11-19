@@ -47,6 +47,29 @@ const ROW_SHAPE =
 module.exports = {
     PRIMER,
 
+    summary: {
+        summary: 'The figures of the entry page',
+        description:
+            '**Purpose.** Use this route for the boxes at the top of a registry\'s entry page (*External ' +
+            'Datasets*): how many datasets the registry holds, how many distinct indicators they publish, how ' +
+            'many are grids and how many shape averages, how many collections hold their data. It is also the ' +
+            'cheapest way to ask whether this service answers at all — the interface hides an entry whose service ' +
+            'does not.\n\n' +
+            PRIMER +
+            '**This route.** One pass over the collection, computed when asked, nothing stored: `datasets`, the ' +
+            'number of records; `indicators`, the distinct gids across every record\'s `std_terms`; ' +
+            '`collections`, the distinct names across every `_collection_list`; `scopes` and `themes`, maps from ' +
+            'the enumeration gid to the number of records carrying it (a record without the property is counted ' +
+            'in `datasets` only). The interface resolves the gids to titles through the dictionary.\n\n' +
+            '**Example**\n\n' +
+            '```\n' +
+            'GET ' + MOUNT + '/summary\n' +
+            '```\n' +
+            'Answers `{ datasets: 33, indicators: 135, collections: 12, scopes: { std_dataset_scope_grid: 17, ' +
+            'std_dataset_scope_shape: 16 }, themes: { std_dataset_theme_climate: 3, std_dataset_theme_drought: 7, ' +
+            'std_dataset_theme_remote-sensing: 13, … } }`.'
+    },
+
     overview: {
         summary: 'The datasets as overview rows, optionally filtered',
         description:

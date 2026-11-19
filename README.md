@@ -27,6 +27,7 @@ All `GET`, all anonymous, all under the mount. A dataset is always addressed by 
 
 | Route | Answers |
 |---|---|
+| `GET /summary` | the figures of the entry page, computed on the fly: `datasets`, `indicators` (distinct `std_terms` gids), `collections` (distinct `_collection_list` names), `scopes` and `themes` (gid → records). Also the probe the interface uses to know whether the service answers. |
 | `GET /overview` | every record as a light **overview row** (`{ total, rows }`): key, code, dates, count, `_info` reduced to title and definition, `std_dataset_domn` whole, `_collection_list` and the two resolutions, `indicators` = the size of `std_terms`. Optional filters `theme`, `extent`, `scope` (gids) and `collection` (a name in `_collection_list`), combined with AND. |
 | `GET /record/:code` | the whole record, as stored. `404` when no record carries the code. |
 | `GET /collections` | one entry per collection named in any record's `_collection_list`: the codes of the datasets stored there, whether the collection exists here, its live document count. |

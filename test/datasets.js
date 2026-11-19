@@ -20,6 +20,35 @@ function get(path) {
 
 const ROW_KEYS = ['_key', 'std_dataset_code', 'count', '_info', 'std_dataset_domn', 'std_dataset_prop', 'indicators'];
 
+describe('GET /summary', function () {
+
+    it('answers the figures of the entry page, computed over the collection', function () {
+        const r = get('/summary');
+        expect(r.status).to.equal(200);
+        expect(r.body).to.have.all.keys('datasets', 'indicators', 'collections', 'scopes', 'themes');
+        expect(r.body.datasets).to.equal(33);
+        expect(r.body.indicators).to.equal(135);
+        expect(r.body.collections).to.equal(12);
+        expect(r.body.scopes).to.deep.equal({ std_dataset_scope_grid: 17, std_dataset_scope_shape: 16 });
+        expect(r.body.themes).to.deep.equal({
+            'std_dataset_theme_climate': 3,
+            'std_dataset_theme_drought': 7,
+            'std_dataset_theme_topography': 1,
+            'std_dataset_theme_remote-sensing': 13,
+            'std_dataset_theme_occurrences': 1,
+            'std_dataset_theme_distribution': 4,
+            'std_dataset_theme_scatterplot': 4
+        });
+    });
+
+    it('agrees with the overview and the collections routes', function () {
+        const s = get('/summary').body;
+        expect(s.datasets).to.equal(get('/overview').body.total);
+        expect(s.collections).to.equal(get('/collections').body.length);
+        expect(Object.values(s.scopes).reduce((a, b) => a + b, 0)).to.equal(s.datasets);
+    });
+});
+
 describe('GET /overview', function () {
 
     it('answers every record as an overview row, sorted by code', function () {

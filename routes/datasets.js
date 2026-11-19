@@ -1,7 +1,7 @@
 'use strict';
 const createRouter = require('@arangodb/foxx/router');
 const joi = require('joi');
-const { overview, byCode, holdingTerm, collections } = require('../lib/queries');
+const { summary, overview, byCode, holdingTerm, collections } = require('../lib/queries');
 const metadata = require('./metadata/datasets');
 const router = createRouter();
 
@@ -48,9 +48,27 @@ const CollectionSummary = joi.object({
     count:      joi.number().integer().allow(null).required().description('The collection\'s live document count; null when it does not exist')
 });
 
+const Counts = joi.object().pattern(/^/, joi.number().integer()).description('gid → number of records');
+
+const Summary = joi.object({
+    datasets:    joi.number().integer().required().description('The records in the collection'),
+    indicators:  joi.number().integer().required().description('Distinct gids across every record\'s std_terms'),
+    collections: joi.number().integer().required().description('Distinct names across every record\'s _collection_list'),
+    scopes:      Counts.required().description('Records per std_dataset_scope value'),
+    themes:      Counts.required().description('Records per std_dataset_theme value')
+});
+
 // ---------------------------------------------------------------------------
 // Routes
 // ---------------------------------------------------------------------------
+
+// GET /summary
+router.get('/summary', function (req, res) {
+    res.json(summary());
+}, 'dataset-summary')
+.response(200, Summary, ['application/json'], 'The figures of the entry page: records, distinct indicators, distinct collections, records per scope and per theme')
+.summary(metadata.summary.summary)
+.description(metadata.summary.description);
 
 // GET /overview?theme=&extent=&scope=&collection=
 router.get('/overview', function (req, res) {

@@ -14,7 +14,7 @@ It replaces the earlier `/dataset` placeholder in the `metadata` database (`skof
 manifest.json            name, version, the one configuration option, scripts, tests
 main.js                  mounts routes/datasets.js at the service root
 lib/queries.js           every query (AQL), the collection accessor, stripPrivate
-routes/datasets.js       the four routes, their joi models, the Swagger tag "Datasets"
+routes/datasets.js       the five routes, their joi models, the Swagger tag "Datasets"
 routes/metadata/         the Swagger prose: a shared primer, one block per route
 scripts/setup.js         reports on the configured collection; creates nothing
 scripts/teardown.js      removes nothing
@@ -37,6 +37,8 @@ The layout is the `/ui` service's (`metadata-store-service`): `router.tag()` for
 
 **Overview rows are a fixed projection.** A list of 33 datasets must not carry 33 descriptions and 33 indicator lists. The row keeps what the census page's *At a glance* table shows: code, title, theme (through `std_dataset_domn` whole, so any further category comes along), scope and extent, the two resolutions, the dates, the count, the number of indicators, the collections. The record route gives the rest.
 
+**The summary is computed, never stored.** `GET /summary` makes one pass over the collection (33 records) each time it is asked: the figures of the entry page's boxes are a function of the records as they are, and storing them would add a thing to keep in step. The route is also the interface's probe: a drawer entry whose service does not answer `/summary` is not shown (the showcase server has no GeoService).
+
 **`holds` on the term route.** A gid can be an indicator of a dataset (`std_terms`), a key descriptor (`std_terms_key`), or both; a term page wants to say which. The row gains `holds`, the list of the properties the gid was found in, instead of two routes or a mode parameter.
 
 **Live counts on the collections route.** `GET /collections` reads each collection's own count from the database (O(1) in RocksDB), beside the dataset codes stored there. A record's `count` is a different number: the records of that dataset in the *first* collection of its `_collection_list`. Both are shown by the pages; this route gives the one the record does not have.
@@ -58,6 +60,6 @@ with the database credentials. On the laptop the mount's `APP` directory is the 
 ## What comes next
 
 - **Statistics from the data collections** (the owner's requirement): `count`, `std_date_start`, `std_date_end` are read from the record, never computed at request time — the collections are too large (`DroughtObservatory` 1.7 G documents, the grids unindexed on `std_dataset_ids`). Today the pipelines write them after a load (`metadata-external-databases/sources/remote-sensing/summarise.js`: one full pass, `count` = the first collection of `_collection_list`, `std_date_end` observed, `std_date_start` declared and only checked; `std_terms` declared, never derived). The owner's earlier service updated the records in a batch; the Foxx way is a manifest **script** (`POST /_api/foxx/scripts/<name>`) run on demand or queued in the background with Foxx queues — the `_compute_service_dataset-stats` process the dictionary names. To be designed with the owner.
-- **The census page as pages**: the mapping of `DatasetsCensus.html` (`metadata-external-databases/data/datasets_census.js`) onto entry page, theme pages, collections summary and dataset pages, and what each needs from this service beyond the four routes.
+- **The census page as pages**: the mapping of `DatasetsCensus.html` (`metadata-external-databases/data/datasets_census.js`) onto entry page, theme pages, collections summary and dataset pages, and what each needs from this service beyond the five routes.
 - **The `metadata` instance**, once the portal records are normalised to the `std_dataset` shape.
 - **The showcase server does not get this service** (owner, 2026-11-19): the machine is small and holds only the panes' collections, not GeoService. The interface's two drawer entries therefore have to cope with an unreachable dataset service — hide or say so — rather than fail.
