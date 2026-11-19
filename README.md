@@ -6,7 +6,7 @@ It is one half of the dataset pages of the Metadata Store Interface (the other h
 
 | Database | Collection | Setting `datasetCollection` | Status |
 |---|---|---|---|
-| `GeoService` | `Dataset` (33 records: the external databases and the scatterplot compilations) | `Dataset` | installed on the laptop |
+| `GeoService` | `Dataset` (33 records: the external databases and the scatterplot compilations) | `Dataset` | installed on the laptop (development mode); not on the showcase server, which holds only the panes' collections |
 | `metadata` | `dataset` (29 records from the EUFGIS portal) | `dataset` | later, once those records are in the `std_dataset` shape |
 
 Cross-repository facts (which server runs what, behind what) live in `../shared/deployments.md`; read it before assuming anything about a server.
@@ -36,7 +36,9 @@ The service **does not read the dictionary**. A Foxx service cannot leave its da
 
 ## Install, upgrade, uninstall
 
-The service has no npm dependencies: the bundle is the source tree.
+**On the laptop** the git repository *is* the installed service: it is cloned into the mount's `APP` directory (`…/Apps/_db/GeoService/dataset/APP`) and the service runs in **development mode**, so an edit is live on the next request and a commit goes straight to GitHub from there. Development mode is switched on with `POST /_db/GeoService/_api/foxx/development?mount=/dataset`.
+
+**On a server** the service is installed from the bundle. It has no npm dependencies: the bundle is the source tree.
 
 ```bash
 git clone https://github.com/skofic/metadata-dataset-service.git && cd metadata-dataset-service

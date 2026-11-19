@@ -53,11 +53,11 @@ The layout is the `/ui` service's (`metadata-store-service`): `router.tag()` for
 POST /_db/GeoService/_api/foxx/tests?mount=/dataset&reporter=default
 ```
 
-with the database credentials. The service has no npm dependencies and is installed from the bundle, so there is no development-mode cache to toggle: an upgrade (PATCH) is what makes an edit live.
+with the database credentials. On the laptop the mount's `APP` directory is the git clone and development mode is on (the owner's habit for every service of the stack), so an edit is live at once and the suite runs against the working tree; a server takes the bundle and is upgraded with PATCH.
 
 ## What comes next
 
-- **Statistics from the data collections** (the owner's requirement): record counts and time-series ranges computed from the data itself, to verify or fill `count`, `std_date_start`, `std_date_end` — the `_compute_service_dataset-stats` process the dictionary names. The shape-average collections (`ShapeData`, `UnitData`) index `std_dataset_ids[*]`; the grids (`Chelsa` 27 M, `DroughtObservatory` 1.7 G documents) do not, so a live count there is a full scan. To be designed with the owner before any route exists.
+- **Statistics from the data collections** (the owner's requirement): `count`, `std_date_start`, `std_date_end` are read from the record, never computed at request time — the collections are too large (`DroughtObservatory` 1.7 G documents, the grids unindexed on `std_dataset_ids`). Today the pipelines write them after a load (`metadata-external-databases/sources/remote-sensing/summarise.js`: one full pass, `count` = the first collection of `_collection_list`, `std_date_end` observed, `std_date_start` declared and only checked; `std_terms` declared, never derived). The owner's earlier service updated the records in a batch; the Foxx way is a manifest **script** (`POST /_api/foxx/scripts/<name>`) run on demand or queued in the background with Foxx queues — the `_compute_service_dataset-stats` process the dictionary names. To be designed with the owner.
 - **The census page as pages**: the mapping of `DatasetsCensus.html` (`metadata-external-databases/data/datasets_census.js`) onto entry page, theme pages, collections summary and dataset pages, and what each needs from this service beyond the four routes.
 - **The `metadata` instance**, once the portal records are normalised to the `std_dataset` shape.
-- **Exposure**: the showcase and dictionary sites expose only `/panes`, `/ui` and `/web`; `/_db/GeoService/dataset/*` must be opened in Caddy (the `skofic.io` repository) before the pages can read it there.
+- **The showcase server does not get this service** (owner, 2026-11-19): the machine is small and holds only the panes' collections, not GeoService. The interface's two drawer entries therefore have to cope with an unreachable dataset service — hide or say so — rather than fail.
