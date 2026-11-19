@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Node (no dependencies today; kept in case tooling is ever added)
+node_modules/
+npm-debug.log*
+
+# Deploy bundle — built by `npm run bundle`, uploaded with a Foxx install (POST)
+# or upgrade (PATCH); a regenerated artefact, never source.
+metadata-dataset-service.zip
+
+# ArangoDB development artefacts
+*.arangodbrc

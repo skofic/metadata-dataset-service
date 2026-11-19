@@ -1,0 +1,24 @@
+{
+    "name": "metadata-dataset-service",
+    "version": "0.1.0",
+    "description": "Read API over the dataset records of the database it is installed in (records in the std_dataset shape of the EUFGIS data dictionary): the overview rows the dataset pages list, one record by code, the collections summary, the datasets that hold a term. One setting: the name of the dataset collection.",
+    "engines": {
+        "arangodb": "^3.0.0"
+    },
+    "author": "Milko Škofič",
+    "license": "Apache 2",
+    "main": "main.js",
+    "configuration": {
+        "datasetCollection": {
+            "type": "string",
+            "default": "Dataset",
+            "required": true,
+            "description": "The collection of this database that holds the dataset records, every one in the std_dataset shape. GeoService: Dataset; metadata: dataset. The service reads it and never writes it; setup and teardown never touch it."
+        }
+    },
+    "scripts": {
+        "setup": "scripts/setup.js",
+        "teardown": "scripts/teardown.js"
+    },
+    "tests": "test/**/*.js"
+}

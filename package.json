@@ -1,0 +1,9 @@
+{
+    "name": "metadata-dataset-service",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Foxx service over a database's dataset records (mounted at /dataset in every database that holds data). No npm dependencies; the bundle is the source tree.",
+    "scripts": {
+        "bundle": "rm -f metadata-dataset-service.zip && zip -qr metadata-dataset-service.zip manifest.json package.json main.js lib routes scripts test README.md MILKO.md LICENSE"
+    }
+}
