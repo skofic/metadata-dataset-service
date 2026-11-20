@@ -6,7 +6,7 @@ It is one half of the dataset pages of the Metadata Store Interface (the other h
 
 | Database | Collection | Setting `datasetCollection` | Status |
 |---|---|---|---|
-| `GeoService` | `Dataset` (33 records: the external databases and the scatterplot compilations) | `Dataset` | installed on the laptop (development mode); not on the showcase server, which holds only the panes' collections |
+| `GeoService` | `Dataset` (33 records: the external databases and the scatterplot compilations) | `Dataset` | installed on the laptop (development mode); on the showcase server with the next full import (its `Dataset` copy is the laptop's; the data collections are not there, so `GET /collections` reports them missing and the interface shows no counts) |
 | `metadata` | `dataset` (29 records from the EUFGIS portal) | `dataset` | later, once those records are in the `std_dataset` shape |
 
 Cross-repository facts (which server runs what, behind what) live in `../shared/deployments.md`; read it before assuming anything about a server.
