@@ -31,9 +31,9 @@ const PRIMER =
     '`std_dataset_resolution_grid` (degrees, a gridded dataset) and `std_dataset_resolution_source` (metres, ' +
     'the raster the data was built from), `species_list`, `gcu_id_number_list`, `std_dataset_markers`, ' +
     '`std_terms_summary`.\n\n' +
-    'The service **does not read the dictionary**: a Foxx service cannot leave its database, and it does not ' +
-    'need to — every gid a record carries is a term the interface already resolves and caches through ' +
-    'the dictionary\'s `/ui` service. It answers anonymously, writes nothing, and strips the maintainer-only ' +
+    'The service **does not read the dictionary**: the interface joins the records to the terms through the ' +
+    'dictionary\'s `/ui` service, so the gids in the answers are resolved by the reader, not here (a Foxx ' +
+    'service can call another over HTTP; this one has no reason to). It answers anonymously, writes nothing, and strips the maintainer-only ' +
     '`_private` section from every record. Install it in every database that holds dataset records and set ' +
     'the collection name; the routes are the same everywhere.\n\n';
 

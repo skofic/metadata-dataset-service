@@ -33,7 +33,7 @@ All `GET`, all anonymous, all under the mount. A dataset is always addressed by 
 | `GET /collections` | one entry per collection named in any record's `_collection_list`: the codes of the datasets stored there, whether the collection exists here, its live document count. |
 | `GET /term/:gid` | the records whose `std_terms` or `std_terms_key` hold the gid, as overview rows with `holds` saying where. |
 
-The service **does not read the dictionary**. A Foxx service cannot leave its database, and the pages do not need it to: a record's texts are multilingual dictionaries the interface localises, and the gids it carries (`std_terms`, `std_terms_key`, the classification) are terms the interface resolves and caches through the dictionary's `/ui` service (`POST /ui/term/bulk`).
+The service **does not read the dictionary**: the interface joins the records to the terms through the dictionary's `/ui` service, so the gids in the answers are resolved by the reader, not here (a Foxx service can call another over HTTP; this one has no reason to, and the day a route needs the dictionary — a statistics batch checking indicators, a server-side theme page — a `dictionaryBase` setting joins `datasetCollection` in the manifest). The pages do not need it to: a record's texts are multilingual dictionaries the interface localises, and the gids it carries (`std_terms`, `std_terms_key`, the classification) are terms the interface resolves and caches through the dictionary's `/ui` service (`POST /ui/term/bulk`).
 
 ## Install, upgrade, uninstall
 
